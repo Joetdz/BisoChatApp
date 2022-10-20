@@ -1,26 +1,30 @@
-.conversationTile{
-    
+.conversationTile {
+
     display: flex;
     justify-content: space-between;
     gap: 4%;
     border-bottom: solid 1px rgba(0, 0, 0, 0.13);
-    min-height: 35%;
+    min-height: 10vh;
     padding: 2% 0;
-    .user-profil{
+    gap: 1%;
+
+    .user-profil {
         min-width: 10%;
-        
+
     }
 
-    .user-detail{
+    .user-detail {
         padding: 3%;
         width: 90%;
-        .user-name{
+
+        .user-name {
             font-size: 13px;
         }
-        .message-label{
+
+        .message-label {
             font-size: 8px;
         }
 
-        }
+    }
 
 }

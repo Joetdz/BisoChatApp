@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import ConversationTile from './ConversationTile';
 import SearchForm from './SearchForm';
 import axios from 'axios';
 
-const ConversationsSection = () => {
-    const [consversation, setConversations] = useState()
+const ContactSection = () => {
+    const [contacts, setContacts] = useState()
+    const [isloading, setisloading] = useState(true)
     const getConversations = () => {
         axios({
             method: 'get',
@@ -12,7 +14,8 @@ const ConversationsSection = () => {
             responseType: 'json'
         })
             .then(data => {
-                setConversations(data.data)
+                setContacts(data.data)
+                setisloading(false)
                 console.log(data.data)
             }
             )
@@ -29,12 +32,21 @@ const ConversationsSection = () => {
                 <SearchForm />
             </div>
             <div className='recently-conversations'>
-                <div className='tilte'>Recent</div>
+                <div className='tilte'>Contact Section</div>
                 <div className='conversations'>
 
-                    <ConversationTile />
-                    <ConversationTile />
-                    <ConversationTile />
+                    {
+                        isloading ? <ConversationTile /> : contacts.map(contact => {
+
+
+                            return <ConversationTile name={contact.name} image={contact.profil} />
+                        })
+                    }
+
+
+
+
+
 
                 </div>
 
@@ -44,4 +56,5 @@ const ConversationsSection = () => {
     );
 };
 
-export default ConversationsSection;
+
+export default ContactSection;

@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Avatar = () => {
+const Avatar = ({ url }) => {
     return (
-        <div className='img-avatar' style={ {backgroundImage:`url(https://i.pravatar.cc/100)` }}>
-            
+        <div className='img-avatar' style={{ backgroundImage: `url(${url})` }}>
+
         </div>
     );
 };

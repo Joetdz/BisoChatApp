@@ -1,8 +1,44 @@
+ .message {
+     display: flex;
+     flex-direction: row;
 
-.message-container{
-    display: flex;
-    max-width: 80%;
-}
-.message-content{
-    
-}
+
+     .message-tile {
+         margin: 10px 30px;
+         border-radius: 5px;
+         color: #222;
+         font-weight: 500;
+         padding: 10px 20px;
+         background-color: #ddd;
+         position: relative;
+         text-align: left;
+         z-index: 1; //à ne pas enlever, très important//
+
+         .pointer {
+             position: absolute;
+             bottom: 0;
+             height: 50px;
+             width: 50px;
+             background: #ddd;
+             z-index: -1;
+         }
+
+         .me {
+             left: 0%;
+             transform: skew(-.300rad);
+         }
+
+         .other {
+             right: 0%;
+             transform: skew(.300rad);
+             background-color: $Fortiary-color;
+         }
+     }
+
+     .other-messages {
+         align-self: center;
+         justify-self: center;
+         background-color: $Fortiary-color;
+         color: #fff;
+     }
+ }

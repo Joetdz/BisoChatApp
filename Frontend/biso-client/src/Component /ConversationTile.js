@@ -1,18 +1,17 @@
 import React from 'react';
 import Avatar from './Avatar';
 
-const ConversationTile = () => {
+const ConversationTile = ({ name, image }) => {
     return (
         <div className='conversationTile'>
             <div className='user-profil'>
-                <Avatar/>
+                <Avatar url={image} />
             </div>
             <div className='user-detail'>
-                <h2 className='user-name'>Joel</h2>
+                <span className='user-name'>{name}</span>
                 <p className='message-label'>salut</p>
-
             </div>
-            
+
         </div>
     );
 };
