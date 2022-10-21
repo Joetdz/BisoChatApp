@@ -1,14 +1,16 @@
-import React from 'react';
-import ConversationTile from './ConversationTile';
+import React, { useContext } from 'react';
+import ContactTile from './ContactTile';
 import SenderMessageForm from './SenderMessageForm';
 import CardMessage from './CardMessage';
+import { generalContext } from '../GeneralContext';
 
 const ChatSecetion = () => {
+    const { currentConversationWife, setCurrentConversationWife } = useContext(generalContext)
 
     return (
         <div className='chatSection'>
             <div className='user-info'>
-                <ConversationTile />
+                <ContactTile name={currentConversationWife.name} image={currentConversationWife.image} label={'En ligne'} />
 
             </div>
             <div className='messages-container'>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ConversationTile from './ConversationTile';
+import ConversationTile from './ContactTile';
 import SearchForm from './SearchForm';
 import axios from 'axios';
 

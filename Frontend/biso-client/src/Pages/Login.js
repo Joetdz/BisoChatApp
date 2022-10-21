@@ -25,6 +25,7 @@ const Login = () => {
         }).then(data => {
             setToken(data.data.token)
             setCurrentUserId(data.data.userId)
+            console.log(data.data.userId)
         })
 
             .catch(error => console.log(error.response.status, error.response.data))

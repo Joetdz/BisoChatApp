@@ -27,7 +27,7 @@ const Signup = () => {
                 data: {
                     name: `${name}`,
                     password: ` ${password}`,
-                    profil: `https://ui-avatars.com/api/?name=${name} `
+                    profil: `https://ui-avatars.com/api/?name=${name}&background=random`
                 }
             }).then(data => console.log(data));
         }

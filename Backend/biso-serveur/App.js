@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 const mongoose = require("mongoose")
 const app = express()
 const userRouter = require('./Routes/users')
+const messagesRouter = require('./Routes/message')
 const { User } = require('./Models/user')
 const cors = require('cors');
 
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGO_URL, {
 app.use(cors())
 app.use(express.json())
 app.use('/', userRouter)
+app.use('/', messagesRouter)
 
 
 app.listen(process.env.PORT, () => {

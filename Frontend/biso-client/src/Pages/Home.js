@@ -12,8 +12,8 @@ const Home = () => {
         <div className='home'>
             <Sidebar />
             {
-                sectionContactSelected == true ? <ConversationsSection /> :
-                    <ContactSection />
+                sectionContactSelected ? <ContactSection /> : <ConversationsSection />
+
             }
 
 

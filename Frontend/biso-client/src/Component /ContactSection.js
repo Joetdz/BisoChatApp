@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
-import ConversationTile from './ConversationTile';
+import ContactTile from './ContactTile';
 import SearchForm from './SearchForm';
 import axios from 'axios';
+import { generalContext } from '../GeneralContext';
 
 const ContactSection = () => {
-    const [contacts, setContacts] = useState()
+    const { contacts, setContacts } = useContext(generalContext)
     const [isloading, setisloading] = useState(true)
     const getConversations = () => {
         axios({
@@ -36,10 +37,10 @@ const ContactSection = () => {
                 <div className='conversations'>
 
                     {
-                        isloading ? <ConversationTile /> : contacts.map(contact => {
+                        isloading ? <ContactTile /> : contacts.map(contact => {
 
 
-                            return <ConversationTile name={contact.name} image={contact.profil} />
+                            return <ContactTile name={contact.name} image={contact.profil} _id={contact._id} />
                         })
                     }
 

@@ -1,38 +1,53 @@
 const { Conversation } = require('../Models/Conversation')
 
+const deleteAll = async (req, res) => {
+    Conversation.deleteMany({})
+        .then(res => console.log(res))
+}
+
 const addConversation = async (req, res,) => {
-    await Conversation.create({
-        participans: [
-            {
-                id: '1',
-                name: 'joel',
-                mail: 'joel',
-                profil: 'hhhhd'
-            },
-            {
-                id: '2',
-                name: 'landrr',
-                mail: 'landry',
-                profil: 'hhhhd'
-            }
-        ],
-
-        message: [
-            {
-                from: '2',
-                to: '1',
-                content: 'bonjour landry'
-
-            }
-        ]
-
-
+    await Conversation.find({
+        moi: req.body.moi, corespondant: req.body.corespondant
     })
-        .then(message => {
-            console.log(message)
-            res.status(200).json(message)
-            res.end()
+        .then(conversation => {
+            console.log('la conversation existe', conversation)
+            if (conversation.length === 0) {
+                Conversation.find({
+                    moi: req.body.corespondant, corespondant: req.body.moi
+                })
+
+                    .then(conversation => {
+                        console.log('la conversation  existe 2', conversation)
+                        if (conversation.length === 0) {
+                            Conversation.create({
+                                ...req.body
+                            })
+                                .then(conversation => {
+                                    res.status(200).json(conversation)
+                                    console.log('la conversation a été créée avec succès', conversation)
+                                })
+                                .catch(err => console.log(err))
+                        } else {
+
+                        }
+                    })
+
+            }
+
+
         })
 }
 
-module.exports = { addConversation }
+
+const getMyConversations = async (req, res) => {
+    await Conversation.find({ moi: req.body.moi })
+        .then(conversations => {
+            console.log(conversations)
+            res.status(200).json(conversations)
+            res.end()
+        })
+        .catch(err => res.status(404).json(err))
+}
+
+
+module.exports = { addConversation, getMyConversations, deleteAll }

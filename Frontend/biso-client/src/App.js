@@ -12,6 +12,9 @@ function App() {
   const [signUpSelected, SetSingUpSelected] = useState(false)
   console.log(signUpSelected)
   const [currentUserId, setCurrentUserId] = useState()
+  const [currentConversationWife, setCurrentConversationWife] = useState([])
+  const [contacts, setContacts] = useState()
+  const [userconnectedInfo, setUserConnectedInfo] = useState()
   return (
     <generalContext.Provider value={{
       sectionContactSelected,
@@ -21,7 +24,13 @@ function App() {
       currentUserId,
       setCurrentUserId,
       signUpSelected,
-      SetSingUpSelected
+      SetSingUpSelected,
+      currentConversationWife,
+      setCurrentConversationWife,
+      contacts,
+      setContacts,
+      userconnectedInfo,
+      setUserConnectedInfo
 
     }}>
 

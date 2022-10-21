@@ -17,7 +17,8 @@ const MessageSchema = new Schema({
 }, { timestamps: true })
 
 const ConversationSchema = new Schema({
-    participans: [userSchema],
+    moi: String,
+    corespondant: String,
     message: [MessageSchema]
 })
 
