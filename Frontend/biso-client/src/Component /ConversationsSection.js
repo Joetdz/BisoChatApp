@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import ConversationTile from './ContactTile';
+import React, { useState, useEffect, useContext } from 'react';
+import ConversationTile from './ConversationTile';
 import SearchForm from './SearchForm';
 import axios from 'axios';
+import { generalContext } from '../GeneralContext';
 
 const ConversationsSection = () => {
-    const [consversation, setConversations] = useState()
+    const { conversations, setConversations } = useContext(generalContext)
+    const { userconnectedInfo, setUserConnectedInfo } = useContext(generalContext)
+
+    const [isLoading, setIsLoading] = useState(true)
+
     const getConversations = () => {
         axios({
             method: 'get',
-            url: 'http://localhost:35000/users',
+            url: `http://localhost:35000/conversations/${userconnectedInfo && userconnectedInfo._id}`,
             responseType: 'json'
         })
             .then(data => {
                 setConversations(data.data)
-                console.log(data.data)
+                setIsLoading(false)
+                console.log('converstions', data.data)
             }
             )
     }
@@ -32,9 +38,15 @@ const ConversationsSection = () => {
                 <div className='tilte'>Recent</div>
                 <div className='conversations'>
 
-                    <ConversationTile />
-                    <ConversationTile />
-                    <ConversationTile />
+                    {isLoading ? <ConversationTile /> : conversations.map(conversation => {
+
+
+                        return <ConversationTile idConversation={conversation._id} idCorespondant={conversation.corespondant} />
+                    })
+
+
+                    }
+
 
                 </div>
 

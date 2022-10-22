@@ -11,7 +11,7 @@ const ContactTile = ({ name, image, label, _id }) => {
     const { sectionContactSelected, setSectionContactSelected } = useContext(generalContext)
 
     const addConversation = () => {
-        setSectionContactSelected(false)
+
         setCurrentConversationWife({ name, image, _id })
         axios({
             method: 'post',

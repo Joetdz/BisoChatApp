@@ -3,6 +3,7 @@ const { Conversation } = require('../Models/Conversation')
 const deleteAll = async (req, res) => {
     Conversation.deleteMany({})
         .then(res => console.log(res))
+    res.end
 }
 
 const addConversation = async (req, res,) => {
@@ -40,7 +41,7 @@ const addConversation = async (req, res,) => {
 
 
 const getMyConversations = async (req, res) => {
-    await Conversation.find({ moi: req.body.moi })
+    await Conversation.find({ $or: [{ moi: req.params.id }, { corespondant: req.params.id }] })
         .then(conversations => {
             console.log(conversations)
             res.status(200).json(conversations)

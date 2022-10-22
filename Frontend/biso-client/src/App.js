@@ -15,6 +15,7 @@ function App() {
   const [currentConversationWife, setCurrentConversationWife] = useState([])
   const [contacts, setContacts] = useState()
   const [userconnectedInfo, setUserConnectedInfo] = useState()
+  const [conversations, setConversations] = useState()
   return (
     <generalContext.Provider value={{
       sectionContactSelected,
@@ -30,7 +31,9 @@ function App() {
       contacts,
       setContacts,
       userconnectedInfo,
-      setUserConnectedInfo
+      setUserConnectedInfo,
+      conversations,
+      setConversations
 
     }}>
 

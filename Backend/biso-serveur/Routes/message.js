@@ -4,7 +4,7 @@ const { addConversation, getMyConversations, deleteAll } = require('../Controlle
 
 
 router.post('/convAdd', addConversation)
-router.get('/convesations/', getMyConversations)
+router.get('/conversations/:id', getMyConversations)
 router.get('/delete', deleteAll)
 
 
