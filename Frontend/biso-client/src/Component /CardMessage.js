@@ -1,15 +1,12 @@
-import React from 'react';
+import React from "react"
 
-const CardMessage = ({ display, pointer, message, from }) => {
-    return (
-        <div className={`message ${display}`}>
-            <div className={`message-tile ${from}`}>
-                <p> {message}</p>
-                <div className={`pointer  ${pointer}`}></div>
-            </div>
-        </div>
+const CardMessage = ({ message, pointer }) => {
+	return (
+		<div className={pointer}>
+			<p className="message-content ">{message}</p>
+		</div>
+	)
+}
+//
 
-    );
-};
-
-export default CardMessage;
+export default CardMessage

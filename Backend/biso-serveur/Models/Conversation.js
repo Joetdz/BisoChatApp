@@ -11,7 +11,8 @@ const userSchema = new Schema({
 const MessageSchema = new Schema({
     from: String,
     to: String,
-    content: String,
+    message: String,
+    medias:String,
 
 
 }, { timestamps: true })

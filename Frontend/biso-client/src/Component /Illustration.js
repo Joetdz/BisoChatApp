@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react"
 
 const Illustration = ({ image }) => {
-    return (
-        <div className="illustration" style={{ backgroundImage: `url(${image})` }} >
+	return (
+		<div
+			className="illustration"
+			style={{ backgroundImage: `url(${image})` }}
+		></div>
+	)
+}
 
-
-        </div>
-    );
-};
-
-export default Illustration;
+export default Illustration

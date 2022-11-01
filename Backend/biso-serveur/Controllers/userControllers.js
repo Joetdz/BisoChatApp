@@ -40,7 +40,20 @@ const signIn = (req, res) => {
                 }
             )
             user.save()
-                .then(user => res.status(200).json(user))
+                .then(user => {
+                    console.log(user)
+                    const playload = {
+                        id: user.id,
+                        name: user.name,
+                        expire: Date.now() + 1000 * 60 * 60 * 24 * 7
+                    }
+                    const token = jwt.encode(playload, config.jwtSecret)
+                    delete user.password
+                    res.status(200).json({
+                        userId: user.id,
+                        token: `Bearer ${token}`
+                    })
+                })
                 .catch(err => res.status(403).json(err.massage))
 
         })
@@ -66,7 +79,7 @@ const logIn = (req, res) => {
                 bcrypt.compare(req.body.password, user.password)
 
                     .then((valid) => {
-                        if (!valid) res.status(401).json("invalid password or username")
+                        if (!valid) res.status(401).json("mot de passe incorrect")
                         else {
                             delete user.password
                             res.status(200).json({
