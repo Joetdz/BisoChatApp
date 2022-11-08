@@ -1,28 +1,32 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const userSchema = new Schema({
+const userSchema = new Schema(
+  {
     id: String,
     name: String,
     email: String,
     profil: String,
-}, { timestamps: true })
+  },
+  { timestamps: true }
+);
 
-
-const MessageSchema = new Schema({
+const MessageSchema = new Schema(
+  {
     from: String,
     to: String,
     message: String,
-    medias:String,
-
-
-}, { timestamps: true })
+    media_id: String,
+    media_url: String,
+  },
+  { timestamps: true }
+);
 
 const ConversationSchema = new Schema({
-    moi: String,
-    corespondant: String,
-    message: [MessageSchema]
-})
+  moi: String,
+  corespondant: String,
+  message: [MessageSchema],
+});
 
-const Conversation = mongoose.model('Conversation', ConversationSchema)
+const Conversation = mongoose.model("Conversation", ConversationSchema);
 
-module.exports = { Conversation }
+module.exports = { Conversation };

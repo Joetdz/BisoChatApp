@@ -54,21 +54,26 @@
       margin-left: 20%;
       font-size: 0.9em;
       padding-left: 50px;
+      cursor: pointer;
       color: $Secondary-color;
 
       :hover {
         border-right: 4px rgb(255, 196, 0) solid;
         font-size: 0.9em;
-        scale: -calc(1);
+        transform: scale(1.2);
       }
     }
   }
 
   .logout {
+    cursor: pointer;
     color: $Secondary-color;
     justify-content: center;
-
     font-size: 2.5em;
+    :hover{
+        transform: scale(1.1);
+        
+    }
   }
 }
 
@@ -109,6 +114,14 @@
       gap: 2%;
       padding: 2% 0;
     }
+   .loader-message, .loader{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20vh;
+      
+    }
+    
   }
 }
 
@@ -120,26 +133,34 @@
   width: 55%;
   background-color: $Secondary-color;
   border-radius: 2%;
-  padding: 2% 3%;
-
+  padding: 0.5% ;
   .user-info {
-    height: 10vh;
+    height: 9vh;
+  border: solid 1px rgba(44, 44, 44, 0.048);
+  border-radius: 8px;
+  
   }
+    .loader-message {
+      padding-left: 45%;
+      align-items: center;
+        justify-content: center;
+        margin-top: 10vh;
+    }
 
   .messages-container {
     display: flex;
-    height: 80%;
+    height: 68vh;
     flex-direction: column;
-    border: solid rgba(63, 63, 63, 0.062) 1px;
-    border-top: white;
     gap: 1%;
     overflow: auto;
     padding: 1% 2%;
+    border: solid 1px rgba(44, 44, 44, 0);
   }
 
   .sender-messages-container {
     border-top: solid rgba(15, 15, 15, 0.158) 1px;
     height: 10vh;
     border: solid 1px rgba(44, 44, 44, 0.048);
+    border-radius: 8px;
   }
 }

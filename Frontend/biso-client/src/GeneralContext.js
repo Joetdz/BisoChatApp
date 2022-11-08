@@ -1,8 +1,8 @@
-import { createContext } from "react"
+import { createContext } from "react";
+import io from "socket.io-client";
 
+const socket = io.connect("http://localhost:35000");
 
+const generalContext = createContext();
 
-
-const generalContext = createContext()
-
-export { generalContext }
+export { generalContext, socket };

@@ -1,130 +1,195 @@
-import React, { useContext, useState, useEffect } from "react"
-import ContactTile from "./ContactTile"
-import CardMessage from "./CardMessage"
-import { generalContext } from "../GeneralContext"
-import axios from "axios"
-import { MdAddAPhoto } from "react-icons/md"
-import { BiSend } from "react-icons/bi"
-import ScrollToBottom from "react-scroll-to-bottom"
+import React, { useContext, useState, useEffect, useRef } from "react";
+import ContactTile from "./ContactTile";
+import CardMessage from "./CardMessage";
+import { generalContext } from "../GeneralContext";
+import axios from "axios";
+import { MdAddAPhoto } from "react-icons/md";
+import { BiSend } from "react-icons/bi";
+import { socket } from "../GeneralContext";
+import Loadercomponent from "./Loadercomponent";
+import Illustration from "./Illustration";
 
 const ChatSecetion = () => {
-	const { currentConversationWife } = useContext(generalContext)
-	const { userconnectedInfo } = useContext(generalContext)
-	const [messages, setMessages] = useState()
-	const [ isLoading, setIsloading] = useState(true)
-	const [contentMessage, setContentMessage] = useState("")
-	console.log("contenus des messages", contentMessage)
-	console.log("message", messages)
-	console.log("message conversation avec", currentConversationWife)
+  const { currentConversationWife } = useContext(generalContext);
+  console.log(currentConversationWife);
+  const { currentConversationUserDetail } = useContext(generalContext);
+  const { userconnectedInfo } = useContext(generalContext);
+  const [messages, setMessages] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
+  const [contentMessage, setContentMessage] = useState("");
 
+  //   const [resetInput, setResetInput] = useState();
+  const [sendImageValue, setSendImageValue] = useState([]);
 
-	const getAllmessages= () => {
-		axios({
-			method: "get",
-			url: `http://localhost:35000/conversation/${currentConversationWife._id}`,
-			data: {
-				moi: userconnectedInfo,
-				corespondant: currentConversationWife._id,
-			},
-		}).then((data) => {
-			setMessages(data.data.conversation.message)
-			setIsloading(false)
-			console.log(data.data)
-		})
-	}
-}
-const upload = (e) => {
-	console.log(e.target.files)
-	const files = e.target.files
-	const formData = new FormData()
-	formData.append("img", files[0])
-	fetch("http://127.0.0.1:8000/api/store", {
-		method: "POST",
-		body: formData,
-	}).then((resp) => {
-		resp.json().then((result) => {
-			console.log(result)
-		})
-	})
+  console.log(sendImageValue[0]);
 
-	const sendMessage = () => {
-		axios({
-			method: "post",
-			url: "http://localhost:35000/message",
-			data: {
-				id: currentConversationWife._id,
-				to: currentConversationWife.corespondant,
-				from: userconnectedInfo._id,
-				message: contentMessage,
-			},
-		}).then((data) => {
-			console.log(data, " message ajoutée avec succès")
-		})
-	}
+  const getAllmessages = () => {
+    setIsloading(true);
+    axios({
+      method: "get",
+      url: `http://localhost:35000/conversation/${currentConversationWife._id}`,
+      data: {
+        moi: userconnectedInfo,
+        corespondant: currentConversationWife._id,
+      },
+    }).then((data) => {
+      setMessages(data.data.conversation.message);
+      setIsloading(false);
+      console.log(data.data);
+    });
+  };
 
-	useEffect(() => {
-		getAllmessages()
-	}, [currentConversationWife._id])
+  const sendMessageWithImage = () => {
+    const formData = new FormData();
+    formData.append("file", sendImageValue[0]);
+    formData.append("upload_preset", "pw405zry");
+    console.log("les fordata", formData);
+    console.log("sendimavalue", sendImageValue[0]);
 
-	return (
-		<div className="chatSection">
-			<div className="user-info">
-				<ContactTile
-					name={currentConversationWife && currentConversationWife.name}
-					image={currentConversationWife && currentConversationWife.profil}
-					label={"En ligne"}
-				/>
-			</div>
-			<div className="messages-container">
-				<ScrollToBottom>
-					{isLoading
-						? "loading"
-						: messages.map((message) => {
-							return (
-								message.message && (
-									<CardMessage
-										pointer="from"
-										message={message.message}
-										key={message._id}
-									/>
-								)
-							)
-						})}
-				</ScrollToBottom>
-			</div>
-			<div className="sender-messages-container">
-				<div className="form">
-					<div className="form-send-message">
-						<input
-							type="text"
-							onChange={(e) => {
-								setContentMessage(e.target.value)
-							}}
-						/>
-						<label
-							htmlFor="i
-						file"
-							className="file-upload"
-						>
-							<div className="fileUploadButton">
-								<MdAddAPhoto />
-							</div>
-						</label>
-						<input
-							accept="image/*"
-							id="file"
-							type="file"
-							style={{ display: "none" }}
-							onChange={(e) => upload(e)}
-						/>
-					</div>
-					<button onClick={sendMessage}>
-						<BiSend />
-					</button>
-				</div>
-			</div>
-		</div>
-	)
-}
+    axios
+      .post("https://api.cloudinary.com/v1_1/dvewnctgf/image/upload", formData)
+      .then((imageSaved) => {
+        console.log(imageSaved.data.url);
+        axios({
+          method: "post",
+          url: "http://localhost:35000/message",
+          data: {
+            id: currentConversationWife._id,
+            to: currentConversationWife.corespondant,
+            from: userconnectedInfo._id,
+            message: contentMessage,
+            media_id: imageSaved.data.public_id,
+            media_url: imageSaved.data.url,
+          },
+        }).then((data) => {
+          console.log(data, " message ajoutée avec succès");
 
-export default ChatSecetion
+          socket.emit("send_message", {
+            id: currentConversationWife._id,
+            to: currentConversationWife.corespondant,
+            from: userconnectedInfo._id,
+            message: contentMessage,
+            media_id: imageSaved.data.public_id,
+            media_url: imageSaved.data.url,
+          });
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const sendMessage = () => {
+    if (sendImageValue) {
+      sendMessageWithImage();
+    } else {
+      axios({
+        method: "post",
+        url: "http://localhost:35000/message",
+        data: {
+          id: currentConversationWife._id,
+          to: currentConversationWife.corespondant,
+          from: userconnectedInfo._id,
+          message: contentMessage,
+        },
+      }).then((data) => {
+        console.log(data, " message ajoutée avec succès");
+
+        socket.emit("send_message", {
+          id: currentConversationWife._id,
+          to: currentConversationWife.corespondant,
+          from: userconnectedInfo._id,
+          message: contentMessage,
+        });
+      });
+    }
+    // setResetInput("");
+  };
+
+  useEffect(() => {
+    setIsloading(true);
+    getAllmessages();
+  }, [currentConversationWife._id]);
+
+  return (
+    <div className="chatSection">
+      <div className="user-info">
+        <ContactTile
+          name={
+            currentConversationUserDetail && currentConversationUserDetail[1]
+          }
+          image={
+            currentConversationUserDetail && currentConversationUserDetail[0]
+          }
+          label={"En ligne"}
+        />
+      </div>
+
+      {isLoading ? (
+        <div className="loader-message">
+          <Loadercomponent />
+        </div>
+      ) : messages.length === 0 ? (
+        <div className="loader-message"></div>
+      ) : (
+        <>
+          <div className="messages-container">
+            {messages &&
+              messages.map((message) => {
+                return message.message ? (
+                  <CardMessage
+                    author={
+                      userconnectedInfo._id === message.from ? "to" : "from"
+                    }
+                    message={message.message}
+                    key={message._id}
+                    image={message.media_url}
+                  />
+                ) : message.media_url ? (
+                  <CardMessage
+                    author={
+                      userconnectedInfo._id === message.from ? "to" : "from"
+                    }
+                    message={message.message}
+                    key={message._id}
+                    image={message.media_url}
+                  />
+                ) : (
+                  ""
+                );
+              })}
+          </div>
+        </>
+      )}
+      <div className="sender-messages-container">
+        <div className="form">
+          <div className="form-send-message">
+            <input
+              type="text"
+              onChange={(e) => {
+                setContentMessage(e.target.value);
+                {
+                  /* setResetInput(contentMessage); */
+                }
+              }}
+            />
+            <label htmlFor="file" className="file-upload">
+              <div className="fileUploadButton">
+                <MdAddAPhoto />
+              </div>
+            </label>
+            <input
+              accept="image/*"
+              id="file"
+              type="file"
+              style={{ display: "none" }}
+              onChange={(e) => setSendImageValue(e.target.files)}
+            />
+          </div>
+          <button onClick={sendMessage}>
+            <BiSend />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+export default ChatSecetion;
