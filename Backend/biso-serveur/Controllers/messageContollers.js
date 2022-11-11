@@ -82,10 +82,9 @@ const getAllmessagesOfConversation = async (req, res) => {
   Conversation.findOne({ _id: req.params.id })
     .then((conversation) => {
       res.status(200).json({ conversation });
-      res.end;
     })
     .catch((err) => {
-      console.log(err);
+      console.log("erreur viens dici", err);
     });
 };
 

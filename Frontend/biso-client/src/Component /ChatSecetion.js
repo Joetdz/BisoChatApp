@@ -15,7 +15,7 @@ const ChatSecetion = () => {
   const { currentConversationUserDetail } = useContext(generalContext);
   const { userconnectedInfo } = useContext(generalContext);
   const [messages, setMessages] = useState([]);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsloading] = useState(true);
   const [contentMessage, setContentMessage] = useState("");
 
   //   const [resetInput, setResetInput] = useState();
@@ -24,7 +24,6 @@ const ChatSecetion = () => {
   console.log(sendImageValue[0]);
 
   const getAllmessages = () => {
-    setIsloading(true);
     axios({
       method: "get",
       url: `http://localhost:35000/conversation/${currentConversationWife._id}`,
@@ -62,6 +61,7 @@ const ChatSecetion = () => {
             media_url: imageSaved.data.url,
           },
         }).then((data) => {
+          getAllmessages();
           console.log(data, " message ajoutée avec succès");
 
           socket.emit("send_message", {
@@ -78,7 +78,7 @@ const ChatSecetion = () => {
   };
 
   const sendMessage = () => {
-    if (sendImageValue) {
+    if (sendImageValue.length !== 0) {
       sendMessageWithImage();
     } else {
       axios({
@@ -91,6 +91,7 @@ const ChatSecetion = () => {
           message: contentMessage,
         },
       }).then((data) => {
+        getAllmessages();
         console.log(data, " message ajoutée avec succès");
 
         socket.emit("send_message", {
@@ -105,9 +106,13 @@ const ChatSecetion = () => {
   };
 
   useEffect(() => {
-    setIsloading(true);
+    socket.on("receive_message", (data) => {
+      if (data) {
+        getAllmessages();
+      }
+    });
     getAllmessages();
-  }, [currentConversationWife._id]);
+  }, [currentConversationWife._id, socket]);
 
   return (
     <div className="chatSection">
@@ -127,8 +132,10 @@ const ChatSecetion = () => {
         <div className="loader-message">
           <Loadercomponent />
         </div>
-      ) : messages.length === 0 ? (
-        <div className="loader-message"></div>
+      ) : !messages.length ? (
+        <div className="loader-message">
+          <Illustration image="chatting-amico.svg" />
+        </div>
       ) : (
         <>
           <div className="messages-container">
